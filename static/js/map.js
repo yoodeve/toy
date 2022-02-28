@@ -1,3 +1,11 @@
+///1. 지도 생성
+///2. 위치 가지고오기
+///3. 선별진료소 마커 띄우기
+
+///map1,2,3.js파일 만들어서 import 동시에
+
+
+ //////////1.지도생성
     var container = document.getElementById('map');  // 지도를 표시할 div
     var options = {
                center: new kakao.maps.LatLng(37.5166119773031, 127.041258693516),  // 지도의 중심좌표
@@ -11,8 +19,10 @@
     var marker = new kakao.maps.Marker({position: markerPosition});
     marker.setMap(null);
 
-//////////////////////////////////
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+
+///////////2.현위치 gps사용해서 잡기
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
         center: new kakao.maps.LatLng(37.5166119773031, 127.041258693516), // 지도의 중심좌표
         level: 7 // 지도의 확대 레벨
@@ -70,7 +80,8 @@ function displayMarker(locPosition, message) {
     map.setCenter(locPosition);
 }
 
-/////////////////////
+
+/////////////////////3.마커 생성
 // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
@@ -129,3 +140,4 @@ function displayMarker(place) {
         infowindow.open(map, marker);
     });
 }
+
