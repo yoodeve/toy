@@ -7,14 +7,14 @@
     var map = new kakao.maps.Map(container, options);
 
     // 마커생성 추가
-    var markerPosition  = new kakao.maps.LatLng(37.5166119773031, 127.041258693516);
+    var markerPosition = new kakao.maps.LatLng(37.5166119773031, 127.041258693516);
     var marker = new kakao.maps.Marker({position: markerPosition});
     marker.setMap(null);
 
 //////////////////////////////////
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(37.5166119773031, 127.041258693516), // 지도의 중심좌표
         level: 7 // 지도의 확대 레벨
     };
 
@@ -39,7 +39,7 @@ if (navigator.geolocation) {
 
 } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+    var locPosition = new kakao.maps.LatLng(37.5166119773031, 127.041258693516),
         message = 'geolocation을 사용할수 없어요..'
 
     displayMarker(locPosition, message);
@@ -76,7 +76,7 @@ var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(37.5166119773031, 127.041258693516), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
@@ -93,7 +93,6 @@ ps.keywordSearch('코로나', placesSearchCB);
 ps.keywordSearch('보건소', placesSearchCB);
 ps.keywordSearch('검사소', placesSearchCB);
 ps.keywordSearch('임시선별검사소', placesSearchCB);
-ps.keywordSearch('코로나19 좋은강안병원 선별진료소', placesSearchCB);
 
 
 // 키워드 검색 완료 시 호출되는 콜백함수 입니다
