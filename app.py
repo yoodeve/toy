@@ -1,9 +1,9 @@
 # 서버
 import pymongo
-import certifi
+import certifi #pip install certifi
 
 client = pymongo.MongoClient(
-    "mongodb+srv://test:sparta@cluster0.hd7sx.mongodb.net/Cluster0?retryWrites=true&w=majority",
+    "mongodb+srv://copa:copa@cluster0.dmead.mongodb.net/Cluster0?retryWrites=true&w=majority",
     tlsCAFile=certifi.where())
 db = client.dbsparta
 
@@ -37,6 +37,7 @@ def home():
         city_total = city.select_one('td:nth-child(5)').text
         city_death = city.select_one('td:nth-child(6)').text
 
+        # charts_city DB에 처음 설정
         # doc = {'city_name': city_name,
         #        'city_domes': city_domes,
         #        'city_intl': city_intl,
@@ -137,11 +138,6 @@ def city_show():
         get_city = list(db.charts_tempcity.find({}, {'_id': False}))
         print('get', get_city)
         return jsonify({'city_name': get_city})
-
-
-# @app.route('/clinic')
-# def clinic():
-#    return render_template('index_clinic.html')
 
 
 if __name__ == '__main__':
