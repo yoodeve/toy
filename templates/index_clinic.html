@@ -4,7 +4,6 @@
 <head>
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c8c1daafb6e172259b74fccc139824b8&libraries=services"></script>
-    <script type="text/javascript" src="../static/js/map2.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,6 +24,52 @@
 
     <!-- Custom styles for this template-->
     <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script>
+        function posting() {
+            let name = $('#url').val()
+            let address = $('#star').val()
+            let hour = $('#comment').val()
+            let tel = $('#comment').val()
+            $.ajax({
+                type: 'POST',
+                url: '/clinic/find,
+                data: {name_give:name, address_give:address, hour_give:hour, tel_give:tel},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+
+    function getting(){
+        $.ajax({
+                type: 'GET',
+                url: '/clinic/read',
+                data: {},
+                success: function (response) {
+                    $('#dataTable').empty()
+                    let rows = response['clinics']
+                    for (let i=0;i<rows.length;i++){
+                        let name=rows[i]['name']
+                        let address=rows[i]['address']
+                        let hour=rows[i]['hour']
+                        let tel=rows[i]['tel']
+                        console.log(name,address,hour,tel)
+
+                        let temp_html = `<tr>
+                                        <td>${name}</td>
+                                        <td>${address}</td>
+                                        <td>${hour}</td>
+                                        <td>${tel}</td>
+                                    </tr>`
+                        $('#dataTable').append(temp_html)
+                    }
+                }
+            });
+    }
+
+    </script>
 </head>
 
 <body id="page-top">
@@ -41,13 +86,6 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="../index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -325,28 +363,42 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">내주변 선별진료소</h1>
                 </div>
-
-                <button class="btn btn-light btn-icon-split" onclick="markermaking()">
-                                        <span class="icon text-gray-600">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                    <span class="text">선별진료소 찾기</span>
-                </button>
-
-                <!-- 지도를 표시할 div 입니다 -->
-                <div className="map_wrap">
-                    <div id="map" style="width:100%;height:550px;"></div>
-                    <div id="menu_wrap" className="bg_white">
-                        <hr>
-                        <ul id="placesList"></ul>
-                        <div id="pagination"></div>
-                    </div>
+                <span class="icon text-gray-600">
+                            <i class="fas fa-arrow-right"></i></span>
+                <button class="btn btn-light btn-icon-split" onclick="getting()">업데이트하기</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th id="name">이름</th>
+                            <th id="address">장소</th>
+                            <th id="hour">운영시간</th>
+                            <th id="tel">전화번호</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>이름</th>
+                            <th>장소</th>
+                            <th>운영시간</th>
+                            <th>전화번호</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td>Tiger Nixon</td>
+                            <td>System Architect</td>
+                            <td>Edinburgh</td>
+                            <td>61</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <script type="text/javascript" src="../static/js/map.js">
-                    <script type="text/javascript" src="../static/js/map2.js">
-                        <script type="text/javascript" src="../static/js/map3.js">
+            </div>
+        </div>
+    </div>
+</div>
 
-                </script>
 </body>
 </html>
 
