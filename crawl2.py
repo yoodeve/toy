@@ -49,7 +49,8 @@ for index, loc_name in enumerate(loc_list):
     next_btn = driver.find_element_by_id("info.search.page.next")
     has_next = "disabled" not in next_btn.get_attribute("class").split(" ")
     Page = 1
-    while has_next:  # 다음 페이지가 있으면 loop
+    for page in 2:
+        while has_next:  # 다음 페이지가 있으면 loop
         # for i in range(2, 6): # 2, 3, 4, 5
         file = open(fileName, 'a', encoding='utf-8')
         time.sleep(1)
@@ -88,7 +89,7 @@ for index, loc_name in enumerate(loc_list):
                 place_address = store_info.select('.info_item > .addr > p')[0].text
                 place_hour = store_info.select('.info_item > .openhour > p > a')[0].text
                 place_tel = store_info.select('.info_item > .contact > span')[0].text
-
+                print(place_name)
                 # 사진url 수집
                 detail = p.find_element_by_css_selector('div.info_item > div.contact > a.moreview')
                 detail.send_keys(Keys.ENTER)
@@ -97,7 +98,7 @@ for index, loc_name in enumerate(loc_list):
 
                 driver.close()
                 driver.switch_to.window(driver.window_handles[0])
-                print(place_name, place_address, place_hour, place_tel)
+
 
         if not has_next:
             print('Arrow is Disabled')

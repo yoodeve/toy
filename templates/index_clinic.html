@@ -26,26 +26,11 @@
     <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
 
     <script>
-        function posting() {
-            let name = $('#url').val()
-            let address = $('#star').val()
-            let hour = $('#comment').val()
-            let tel = $('#comment').val()
-            $.ajax({
-                type: 'POST',
-                url: '/clinic/find,
-                data: {name_give:name, address_give:address, hour_give:hour, tel_give:tel},
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.reload()
-                }
-            });
-        }
 
     function getting(){
         $.ajax({
                 type: 'GET',
-                url: '/clinic/read',
+                url: '/clinic',
                 data: {},
                 success: function (response) {
                     $('#dataTable').empty()
@@ -55,20 +40,51 @@
                         let address=rows[i]['address']
                         let hour=rows[i]['hour']
                         let tel=rows[i]['tel']
-                        console.log(name,address,hour,tel)
-
                         let temp_html = `<tr>
                                         <td>${name}</td>
                                         <td>${address}</td>
                                         <td>${hour}</td>
                                         <td>${tel}</td>
-                                    </tr>`
+                                        </tr>`
                         $('#dataTable').append(temp_html)
                     }
                 }
             });
     }
-
+    //
+    // function searching(){
+    //     $.ajax({
+    //             type: 'GET',
+    //             url: '/clinic',
+    //             data: {},
+    //             success: function () {
+    //                 var k;
+    //                 var temp;
+    //                 $(document).ready(function () {
+    //                     $("#search").keyup(function () {
+    //                         k = $(this).val()
+    //                         console.log(k)
+    //                         temp = $("#datatable1:contains('" + k + "')") // class 가 datatable인 것 중에서 k(검색어)를 찾음
+    //                         console.log(temp)
+    //                         // let rows = response['clinics']
+    //                             // for (let i=0;i<rows.length;i++) {
+    //                             //     let name = rows[i]['name']
+    //                             //     let address = rows[i]['address']
+    //                             //     let hour = rows[i]['hour']
+    //                             //     let tel = rows[i]['tel']
+    //                             //     let temp_html = `<tr>
+    //                             //                     <td>${name}</td>
+    //                             //                     <td>${address}</td>
+    //                             //                     <td>${hour}</td>
+    //                             //                     <td>${tel}</td>
+    //                             //                     </tr>`
+    //                             //     $('#dataTable').append(temp_html)
+    //                             //}
+    //                                 })
+    //                             })
+    //                         }
+    //                     });
+    //                 }
     </script>
 </head>
 
@@ -360,14 +376,18 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <div class="d-sm-flex align-items-center justify-content-bgit push originetween mb-4">
                     <h1 class="h3 mb-0 text-gray-800">내주변 선별진료소</h1>
                 </div>
                 <span class="icon text-gray-600">
                             <i class="fas fa-arrow-right"></i></span>
                 <button class="btn btn-light btn-icon-split" onclick="getting()">업데이트하기</button>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <div>
+                    <h4>업데이트하기 누른 후 Ctrl+F로 동네이름 검색해주세요!</h4>
+                </div>
+
+                    <table class="table table-bordered" width="100%" cellspacing="0">
                         <thead>
                         <tr>
                             <th id="name">이름</th>
@@ -384,13 +404,7 @@
                             <th>전화번호</th>
                         </tr>
                         </tfoot>
-                        <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                        </tr>
+                        <tbody id="dataTable" class="datatable">
                         </tbody>
                     </table>
                 </div>

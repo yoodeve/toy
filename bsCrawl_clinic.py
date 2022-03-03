@@ -9,6 +9,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
+from pymongo import MongoClient
+client = MongoClient('mongodb+srv://janhold:sparta@cluster0.vyplo.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta
+
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
@@ -19,13 +23,13 @@ driver = webdriver.Chrome(service=s)
 ##################### variable related selenium ##########################
 ##########################################################################
 # 서울 특별시 구 리스트
-loc_list = ['서울', '경기도', '충북', '충남', '전북', '전남', '경북', '경남', '걍원도', '제주']
+loc_list = ['서울', '경기도', '충북', '충남', '전북', '전남', '경북', '경남', '걍원도', '제주', '부산','대구','울산','대전','광주','인천']
 
 # csv 파일에 헤더 만들어 주기
 for index, loc_name in enumerate(loc_list):
     fileName = 'test.csv'  # index.__str__() + '_' + gu_name + '.'+'csv'
     file = open(fileName, 'w', encoding='utf-8')
-    file.write("카페명" + "|" + "주소" + "|" + "영업시간" + "|" + "전화번호" + "|" + "대표사진주소" + "\n")
+    file.write("시설명" + "|" + "주소" + "|" + "영업시간" + "|" + "전화번호" + "|" + "대표사진주소" + "\n")
     file.close()  # 처음에 csv파일에 칼럼명 만들어주기
 
     options = webdriver.ChromeOptions()
@@ -91,6 +95,7 @@ for index, loc_name in enumerate(loc_list):
                 place_hour = store_info.select('.info_item > .openhour > p > a')[0].text
                 place_tel = store_info.select('.info_item > .contact > span')[0].text
 
+
                 # 사진url 수집
                 detail = p.find_element_by_css_selector('div.info_item > div.contact > a.moreview')
                 detail.send_keys(Keys.ENTER)
@@ -100,9 +105,16 @@ for index, loc_name in enumerate(loc_list):
                 driver.close()
                 driver.switch_to.window(driver.window_handles[0])
                 print(place_name, place_address, place_hour, place_tel)
-
+                doc = {
+                    'name': place_name,
+                    'address': place_address,
+                    'hour': place_hour,
+                    'tel': place_tel,
+                }
+                db.clinics.insert_one(doc)
                 file.write(
                     place_name + "|" + place_address + "|" + place_hour + "|" + place_tel + "|" + "\n")
+
             print(i, ' of', ' [ ', Page, ' ] ')
         next_btn = driver.find_element_by_id("info.search.page.next")
         has_next = "disabled" not in next_btn.get_attribute("class").split(" ")
@@ -114,4 +126,6 @@ for index, loc_name in enumerate(loc_list):
         else:  # 다음 페이지 있으면
             Page += 1
             next_btn.send_keys(Keys.ENTER)
+
+
     print("End of Crawl")
