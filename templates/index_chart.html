@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <title> COPA </title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+    <!-- 차트 링크 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <style>
+    .chart-bar-1 {
+        position: relative;
+        height: 70%;
+        width: 100%;
+    }
+
+
+    .city_box{
+        border-radius: 5px;
+        float:left;
+        width:19%;
+        height:50%;
+        padding:10px;
+        text-align: center;
+        font-size: 60%;
+        margin: 10px auto 0px auto;
+    }
+
+    .city_box_C{
+        border-radius: 5px;
+        float:left;
+        width:19%;
+        height:100%;
+        padding:10px;
+        text-align: center;
+        font-size: 60%;
+        margin: 10px auto 0px 25px;
+    }
+
+
+    .city_box_R{
+        border-radius: 5px;
+        float:right;
+        width:19%;
+        height:100%;
+        padding:10px;
+        text-align: center;
+        font-size: 60%;
+        margin: 10px auto 0px auto;
+    }
+
+    </style>
+
+    <!-- Bar_chart-->
+    <script>
+        $(document).ready(function(){
+            listing();
+             $("#seoul").click();
+        });
+
+        function listing() {
+            $.ajax({
+                type: 'GET',
+                url: '/chart/list',
+                data: {},
+                success: function (response) {
+                    let rows = response['charts']
+                    console.log(rows[1]['daily_total'])
+                    for (let i = 0; i < rows.length; i++) {
+                        let today = rows[i]['daily_today']
+                        let total = rows[i]['daily_total']
+
+                        const mydata = [parseInt(rows[rows.length - 7]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 6]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 5]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 4]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 3]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 2]['daily_total'].replace(/[^0-9]/g, '')),
+                            parseInt(rows[rows.length - 1]['daily_total'].replace(/[^0-9]/g, ''))];
+
+                        var ctx = document.getElementsByClassName("myChart");
+
+                        var mixedChart = {
+                            type: 'bar',
+                            labels: [rows[rows.length - 7]['daily_today'],
+                                rows[rows.length - 6]['daily_today'],
+                                rows[rows.length - 5]['daily_today'],
+                                rows[rows.length - 4]['daily_today'],
+                                rows[rows.length - 3]['daily_today'],
+                                rows[rows.length - 2]['daily_today'],
+                                rows[rows.length - 1]['daily_today']],
+                            datasets: [{
+                                label: '코로나-19 신규확진자',
+                                data: mydata,
+                                backgroundColor: 'rgba(78, 115, 223, 14)'
+                            },
+                            ]
+                        };
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: mixedChart,
+                            options: {
+                                legend: {
+                                    display: true
+                                }
+                            }
+                        });
+
+                    }
+                }
+            })
+
+        }
+
+        //시도별확진자 보여주기 save_city + show_city 함께 호출
+        function save_city(city_name) {
+            $.ajax({
+                type: "POST",
+                url: "/chart/city",
+                data: {city_give: city_name},
+                success: function (response) {
+                }
+            });
+        }
+
+        function show_city() {
+            $('#city_list').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/chart/city',
+                data: {},
+                success: function (response) {
+                    let rows = response['city_name']
+                    for (let i = 0; i < rows.length; i++) {
+                        let city_name = rows[i]['city_name']
+                        let city_domes = rows[i]['city_domes']
+                        let city_subtotal = rows[i]['city_subtotal']
+                        let city_intl = rows[i]['city_intl']
+                        let city_total = rows[i]['city_total']
+                        let city_death = rows[i]['city_death']
+
+
+                        let temp_html = `<div class="col-lg-20 mb-100">
+                                            <div class="card bg-primary text-white shadow">
+                                                <div class="card-body">
+                                                    <div>
+                                                        <h3 style="text-align: center"><U>${city_name}</U></h3>
+                                                        <hr>
+                                                        <div style="margin:auto 10px auto 0px; background-color: green">
+                                                            <div class="city_box" style="background-color: aliceblue; color:darkblue">
+                                                                <h3 class="info_num"><b>${city_domes}</b></h3>
+                                                                <h6 style="color:darkblue;"><b>국내 확진</b></h6>
+                                                            </div>
+                                                            <div class="city_box" style="background-color: lightblue; color:darkblue">
+                                                                <h3 class="info_num"><b>${city_intl}</b></h3>
+                                                                <h6 style="color:darkblue;"><b>해외 확진</b></h6>
+                                                            </div>
+                                                            <div class="city_box" style="background-color: #244ec9; color:white">
+                                                                <h3 class="info_num"><b>${city_subtotal}</b></h3>
+                                                                <h6 style="color:white;"><b>신규 확진</b></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="city_box_C" style="background-color: darkblue; color:white">
+                                                            <h3 class="info_num"><b>${city_total}</b></h3>
+                                                            <h6 style="color:white;"><b>누적 확진</b></h6>
+                                                        </div>
+                                                        <div class="city_box_R" style="background-color: #30497c; color:white">
+                                                            <h3 class="info_num"><b>${city_death}</b></h3>
+                                                            <h6 style="color:white;"><b>사망</b></h6>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                            </div>
+                                        </div>`
+
+                        $('#city_list').append(temp_html)
+
+                    }
+                }
+            })
+        }
+
+    </script>
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3"> <Img src="../static/img/logo.png" width="136px" height="58px"></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="/">
+                <span>Dashboard</span></a>
+        </li>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item active">
+            <a class="nav-link" href="chart">
+                <span>코로나 현상황</span></a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="check_list">
+                <span>코로나증상 체크리스트</span></a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="clinic">
+                <span>내 주변 선별진료소</span></a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="review">
+                <span>백신후기</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">코로나 현상황</h1>
+
+
+                <!-- Content Row -->
+<!--                <div class="row">-->
+                <div>
+<!--                    <div class="col-xl-8 col-lg-7">-->
+                    <div>
+
+ <!--------------------------------- Bar Chart ------------------------------------------------------------------------------------------------------------>
+                        <div id="chart" class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary"> 신규 확진자 </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-bar-1">
+                                    <canvas class="myChart"></canvas>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="height:100px">
+                        </div>
+                        <h1 class="h3 mb-2 text-gray-800">시도별 확진자</h1>
+                        <div style="align-items: center;">
+                            <button id="seoul" onclick="save_city('서울'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">서울</span>
+                            </button>
+
+                            <button onclick="save_city('부산'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">부산</span>
+                            </button>
+
+                            <button onclick="save_city('대구'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">대구</span>
+                            </button>
+
+                            <button onclick="save_city('인천'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">인천</span>
+                            </button>
+
+                             <button onclick="save_city('광주'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">광주</span>
+                            </button>
+
+                            <button onclick="save_city('대전'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">대전</span>
+                            </button>
+
+                            <button onclick="save_city('울산'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">울산</span>
+                            </button>
+
+                            <button onclick="save_city('세종'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">세종</span>
+                            </button>
+
+                            <button onclick="save_city('경기'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">경기</span>
+                            </button>
+
+                            <button onclick="save_city('강원'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">강원</span>
+                            </button>
+
+                            <button onclick="save_city('충북'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">충북</span>
+                            </button>
+
+                            <button onclick="save_city('충남'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">충남</span>
+                            </button>
+
+                            <button onclick="save_city('전북'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">전북</span>
+                            </button>
+
+                            <button onclick="save_city('전남'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">전남</span>
+                            </button>
+
+                            <button onclick="save_city('경북'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">경북</span>
+                            </button>
+
+                            <button onclick="save_city('경남'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">경남</span>
+                            </button>
+
+                            <button onclick="save_city('제주'); show_city();" href="#" class="btn btn-light btn-icon-split">
+                                <span class="text">제주</span>
+                            </button>
+                        </div>
+
+
+                        <div id="city_list">
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; COPA 2022</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Bootstrap core JavaScript-->
+<script src="../static/vendor/jquery/jquery.min.js"></script>
+<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="../static/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="../static/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="../static/js/demo/chart-area-demo.js"></script>
+<script src="../static/js/demo/chart-pie-demo.js"></script>
+
+</body>
+
+</html>
