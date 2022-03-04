@@ -10,7 +10,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://janhold:sparta@cluster0.vyplo.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 
 from selenium.webdriver.chrome.service import Service
