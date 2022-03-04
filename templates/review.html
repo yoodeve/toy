@@ -227,13 +227,7 @@
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight" style="color: black">코로나 백신 후기</h6>
                             </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
-                            <div class="card-body" id="review-list">
-
-                            </div>
+                            <div class="card-body" id="review-list"></div>
                         </div>
 
                     </div>
@@ -333,20 +327,7 @@
         $('#review-box').hide()
     }
 
-<<<<<<< HEAD
-    function delete_review(num) {
-            $.ajax({
-                type: "POST",
-                url: "/toy/delete",
-                data: {num_give:num},
-                success: function (response) {
-                    alert(response["msg"])
-                    window.location.reload()
-                }
-            });
-        }
-=======
->>>>>>> origin/master
+
 
     function show() {
         $('#review-list').empty()
@@ -360,21 +341,15 @@
                 for (let i = 0; i < rows.length; i++) {
                     let writer = rows[i]['writer']
                     let review = rows[i]['review']
-<<<<<<< HEAD
                     let num = rows[i]['num']
-=======
->>>>>>> origin/master
+
                     let temp_html = `<div class="card">
                                             <div class="card-body">
                                                 <blockquote class="blockquote mb-0">
                                                     <p>${review}</p>
-<<<<<<< HEAD
                                                     <footer class="blockquote-footer">${writer}
-                                                        <button onclick="delete_review(${num})" style="margin-left: 460px" type="button" class="btn btn-outline-danger" >삭제!</button>
-                                                    </foote>
-=======
+                                                        </foote>
                                                     <footer class="blockquote-footer">${writer}</footer>
->>>>>>> origin/master
                                                 </blockquote>
                                             </div>
                                         </div>`
