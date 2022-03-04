@@ -1,6 +1,5 @@
 # DB
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://copa:copa@cluster0.dmead.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 # 크롤링
 import urllib.parse
