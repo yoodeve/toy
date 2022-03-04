@@ -13,7 +13,6 @@ driver = webdriver.Chrome(service=s)
 
 # DB연결
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://copa:20220303@cluster0.dmead.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 
 # 크롤링
