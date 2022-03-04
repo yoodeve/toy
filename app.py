@@ -3,17 +3,14 @@
 from math import ceil
 
 from flask import Flask, render_template, jsonify, request
-from selenium import webdriver
 
-from selenium.webdriver.chrome.service import Service
+from config import MONGODB_SETTIING
+
 app = Flask(__name__)
-s = Service('/Users/yoo/Desktop/yoo/projects/toy_clinic/chromedriver')
-
-driver = webdriver.Chrome(service=s)
 
 # DB연결
 from pymongo import MongoClient
-db = client.dbsparta
+db = MongoClient(MONGODB_SETTIING.values())
 
 # 크롤링
 import requests

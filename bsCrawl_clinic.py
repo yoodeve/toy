@@ -10,7 +10,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 from pymongo import MongoClient
-db = client.dbsparta
+
+from config import MONGODB_SETTIING
+
+db = MongoClient(MONGODB_SETTIING.values())
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By

@@ -1,6 +1,9 @@
 # DB
 from pymongo import MongoClient
-db = client.dbsparta
+
+from config import MONGODB_SETTIING
+
+db = MongoClient(MONGODB_SETTIING.values())
 # 크롤링
 import urllib.parse
 import urllib.request
