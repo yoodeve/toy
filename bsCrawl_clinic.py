@@ -7,14 +7,15 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://janhold:sparta@cluster0.vyplo.mongodb.net/Cluster0?retryWrites=true&w=majority')
+
+from config import MONGODB_SETTIING
+
+client = MongoClient(MONGODB_SETTIING.values())
 db = client.dbsparta
 
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 
 s = Service('/Users/yoo/Desktop/yoo/projects/toy_clinic/chromedriver')
 

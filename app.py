@@ -3,17 +3,14 @@
 from math import ceil
 
 from flask import Flask, render_template, jsonify, request
-from selenium import webdriver
 
-from selenium.webdriver.chrome.service import Service
+from config import MONGODB_SETTIING
+
 app = Flask(__name__)
-s = Service('/Users/yoo/Desktop/yoo/projects/toy_clinic/chromedriver')
-
-driver = webdriver.Chrome(service=s)
 
 # DB연결
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://copa:20220303@cluster0.dmead.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient(MONGODB_SETTIING.values())
 db = client.dbsparta
 
 # 크롤링
@@ -24,11 +21,12 @@ from bs4 import BeautifulSoup
 def Dashboard():
     return render_template('index.html')
 
+# 선별진료소 찾기
 @app.route('/clinic')
 def clinic():
     return render_template('index_clinic.html')
 
-@app.route("/clinic", methods=["GET"])
+@app.route("/clinics", methods=["GET"])
 def clinic_get():
     clinic_list = list(db.clinics.find({}, {'_id': False}))
     return jsonify({'clinics': clinic_list})
@@ -213,6 +211,6 @@ def web_naver_get():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5050, debug=True)
+    app.run('0.0.0.0', port=5000, debug=True)
 
 # >>>>>>> c188acabc8f4563a12f39946f78b9c47f32c10d7
